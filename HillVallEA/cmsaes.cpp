@@ -262,7 +262,7 @@ void hillvallea::cmsaes_t::estimate_sample_parameters()
     }
 
     sigma *= exp(weighted_sum_logsigma) / exp(sum_logsigma / pop->size());
-    assert(!isnan(sigma));
+    assert(!std::isnan(sigma));
   }
 
   // sample covariance

@@ -19,7 +19,7 @@ Main script to run HillVallEA on the test problems of the CEC2013 niching bechma
 void  write_CEC2013_niching_file(int core_search_alg, int cluster_alg, int problem, int run, std::vector<hillvallea::solution_pt> elitist_archive)
 {
 	
-	std::ofstream file;
+    std::ofstream file;
     std::string filename;
     std::string write_directory = "../niching_competition_data/";
     
@@ -73,9 +73,11 @@ void run_CEC2013_niching_problem(int core_search_alg, int cluster_alg, int probl
     hillvallea.cluster_alg = cluster_alg;
     
     hillvallea.run();
+    
+    
 
     // write the elitist archive
-    // write_CEC2013_niching_file(core_search_alg, cluster_alg, problem_index, run + 1, hillvallea.elitist_archive);
+    //write_CEC2013_niching_file(core_search_alg, cluster_alg, problem_index, run + 1, hillvallea.elitist_archive);
 
     // Compute Peak Ratio using the CEC2013 guidelines
     //-------------------------------------------------------
@@ -88,15 +90,16 @@ void run_CEC2013_niching_problem(int core_search_alg, int cluster_alg, int probl
     // Compute the peak ratio & success rate
     std::vector<std::vector<double>> seeds;
     CEC2013 *cec2013_function_pointer = new CEC2013(problem_index);
-    int peaks_found = how_many_goptima(optimum_candidates, seeds, cec2013_function_pointer, 1e-5, cec2013_function_pointer->get_rho());
+    int peaks_found = how_many_goptima(optimum_candidates, seeds, cec2013_function_pointer, 1e-4, cec2013_function_pointer->get_rho());
 
     pr[run] = ((double)peaks_found) / cec2013_function_pointer->get_no_goptima();
-    f1[run] = ((double)peaks_found) / optimum_candidates.size();
+    // Hack for computing the number of evaluations to optimum
+    f1[run] = hillvallea.number_of_evaluations;//((double)peaks_found) / optimum_candidates.size();
 
     std::cout << std::fixed << std::setw(7) << std::setprecision(0) << problem_index
       << std::fixed << std::setw(7) << std::setprecision(0) << run
-      << std::fixed << std::setw(14) << std::setprecision(3) << pr[run]
-      << std::fixed << std::setw(8) << std::setprecision(3) << f1[run]
+      << std::fixed << std::setw(14) << std::setprecision(1) << pr[run]
+      << std::fixed << std::setw(8) << std::setprecision(0) << f1[run]
       << std::endl;
 
     delete cec2013_function_pointer;
@@ -152,7 +155,8 @@ int main(int argc, char **argv)
     {
       std::cout << "Core Search alg = " << core_search_alg[a] << " with cluster alg = " << cluster_alg[c] << std::endl;
       
-      for (int i = 0; i < problem_list.size(); ++i)
+      //for (int i = 0; i < problem_list.size(); ++i)
+      for (int i = 9; i < 10; ++i)
       {
 
         int problem_index = problem_list[i];
