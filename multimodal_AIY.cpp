@@ -138,6 +138,8 @@ class multimodal_AIY_t : public fitness_t
 		sol.f += power;
 
 	  }
+
+	  sol.f /= 18.0;
 	  
 	  sol.penalty = 0.0;
 	}
