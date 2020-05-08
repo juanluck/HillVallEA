@@ -74,17 +74,26 @@ class multimodal_AIY_t : public fitness_t
 
 	double Iinf(double V)
 	{
-		gCa=0.2;  gK=0.4; gL=0.3;
-		ECa=104; EK=-18.4; EL=-63.1;
-		V12mCa=-23.8; V12hCa=-37.2; V12mK=-25.1;
-		kmCa=18.4; khCa=-27.8; kmK=16.3;
+		double gCa = 0.2; 
+		double gK = 0.4; 
+		double gL = 0.3;
+		double ECa = 104; 
+		double EK = -18.4;
+		double EL = -63.1;
+		double V12mCa = -23.8;
+		double V12hCa = -37.2;
+		double V12mK = -25.1;
+		double kmCa = 18.4;
+		double khCa = -27.8;
+		double kmK = 16.3;
 
 		double y;
-		y = gCa*xinf(V,V12mCa,kmCa)*xinf(VH,V12hCa,khCa)*(V-ECa)
-		+ gK*xinf(V,V12mK,kmK).*(V-EK)
+		y = gCa*xinf(V,V12mCa,kmCa)*xinf(V,V12hCa,khCa)*(V-ECa)
+		+ gK*xinf(V,V12mK,kmK)*(V-EK)
 		+ gL*(V-EL);
 		return y;
 	}
+
 
 	void define_problem_evaluation(solution_t & sol)
 	{

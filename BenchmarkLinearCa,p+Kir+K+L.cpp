@@ -78,21 +78,32 @@ class multimodal_RIM_t : public fitness_t
 		return x;
 	}
 
-		double Iinf(double V)
+	double Iinf(double V)
 	{
-
-		gCa=0.3; gKir=0.12; gK=0.86; gL=0.44;
-		ECa=35.3; EK=-77.1; EL=-64.23;
-		V12mCa=-29.75; V12hKir=-74.6; V12mK=-48.9; V12hK=-79.6;
-		kmCa=29.1; kKir=-15.1; kmK=28.71; khK=-21;
-
+		double gCa = 0.3;
+		double gKir = 0.12; 
+		double gK = 0.86; 
+		double gL = 0.44;
+		double ECa = 35.3; 
+		double EK = -77.1;
+		double EL = -64.23;
+		double V12mCa = -29.75;
+		double V12hKir = -74.6;
+		double V12mK = -48.9;
+		double V12hK = -79.6;
+		double kmCa = 29.1;
+		double kKir = -15.1;
+		double kmK = 28.71;
+		double khK = -21;
+	
 		double y;
-		y = gCa*xinf(V,V12mCa,kmCa)*xinf(VH,V12hCa,khCa)*(V-ECa)
+		y = gCa*xinf(V,V12mCa,kmCa)*(V-ECa) 
 		+ gKir*xinf(V,V12hKir,kKir)*(V-EK)
-		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK)
+		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK) 
 		+ gL*(V-EL);
 		return y;
 	}
+
 
 	void define_problem_evaluation(solution_t & sol)
 	{

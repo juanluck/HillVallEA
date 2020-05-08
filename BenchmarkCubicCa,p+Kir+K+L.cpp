@@ -80,19 +80,30 @@ class multimodal_AFD_t : public fitness_t
 
 	double Iinf(double V)
 	{
-
-		gCa=4.7; gKir=1.3; gK=2.6; gL=1.6;
-		ECa=59.7; EK=-98.9; EL=-88.4;
-		V12mCa=-3.4; V12hKir=-72.6; V12mK=-8.2; V12hK=-55.4;
-		kmCa=28.6; kKir=-19.6; kmK=4.1; khK=-15.4;
-
+		double gCa = 4.7;
+		double gKir = 1.3; 
+		double gK = 2.6; 
+		double gL =1.6;
+		double ECa = 59.7; 
+		double EK = -98.9;
+		double EL = -88.4;
+		double V12mCa = -3.4;
+		double V12hKir = -72.6;
+		double V12mK = -8.2;
+		double V12hK = -55.4;
+		double kmCa = 28.6;
+		double kKir = -19.6;
+		double kmK = 4.1;
+		double khK = -15.4;
+	
 		double y;
-		y = gCa*xinf(V,V12mCa,kmCa)*xinf(VH,V12hCa,khCa)*(V-ECa)
+		y = gCa*xinf(V,V12mCa,kmCa)*(V-ECa) 
 		+ gKir*xinf(V,V12hKir,kKir)*(V-EK)
-		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK)
+		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK) 
 		+ gL*(V-EL);
 		return y;
 	}
+
 
 	void define_problem_evaluation(solution_t & sol)
 	{
