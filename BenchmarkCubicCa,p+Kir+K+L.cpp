@@ -1,7 +1,7 @@
 /*
 
 
-Optimizing RIM neuron of the C. elegans using HillVallEA 
+Optimizing AFD neuron of the C. elegans using HillVallEA 
 By Juanlu J. Laredo
 Code available at:
 
@@ -22,16 +22,16 @@ github.com/SCMaree/HillVallEA
 
 namespace hillvallea
 {
-class multimodal_RIM_t : public fitness_t
+class multimodal_AFD_t : public fitness_t
 {
 	public:
 
-	multimodal_RIM_t()
+	multimodal_AFD_t()
 	{
 	  number_of_parameters = 15;
 	  maximum_number_of_evaluations = 10000;
 	}
-	~multimodal_RIM_t() {}
+	~multimodal_AFD_t() {}
 
 	void get_param_bounds(vec_t & lower, vec_t & upper) const
 	{
@@ -41,15 +41,15 @@ class multimodal_RIM_t : public fitness_t
 	  lower[0]  = 0.1;
 	  lower[1]  = 0.1;
 	  lower[2]  = 0.1;
-	  lower[3]	= 0.1;
+	  lower[3]  = 0.1;
 	  lower[4]  = 20;
 	  lower[5]  = -100;
 	  lower[6]  = -90;
 	  lower[7]  = -90;
 	  lower[8]  = -90;
 	  lower[9]  = -90;
-	  lower[10]  = -90;
-	  lower[11]  = 1;
+	  lower[10] = -90;
+	  lower[11] = 1;
 	  lower[12] = -30;
 	  lower[13] = 1;
 	  lower[14] = -30;
@@ -64,8 +64,8 @@ class multimodal_RIM_t : public fitness_t
 	  upper[7]  = -2;
 	  upper[8]  = -2;
 	  upper[9]  = -2;
-	  upper[10]  = -2;
-	  upper[11]  = 30;
+	  upper[10] = -2;
+	  upper[11] = 30;
 	  upper[12] = -1;
 	  upper[13] = 30;
 	  upper[14] = -1;
@@ -78,16 +78,32 @@ class multimodal_RIM_t : public fitness_t
 		return x;
 	}
 
+	double Iinf(double V)
+	{
+
+		gCa=4.7; gKir=1.3; gK=2.6; gL=1.6;
+		ECa=59.7; EK=-98.9; EL=-88.4;
+		V12mCa=-3.4; V12hKir=-72.6; V12mK=-8.2; V12hK=-55.4;
+		kmCa=28.6; kKir=-19.6; kmK=4.1; khK=-15.4;
+
+		double y;
+		y = gCa*xinf(V,V12mCa,kmCa)*xinf(VH,V12hCa,khCa)*(V-ECa)
+		+ gKir*xinf(V,V12hKir,kKir)*(V-EK)
+		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK)
+		+ gL*(V-EL);
+		return y;
+	}
+
 	void define_problem_evaluation(solution_t & sol)
 	{
-  	  double vecV[16] = {-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50};
-	  double Inf[16] = {-12.2, -9.13, -6.57, -4.91, -3.57, -2.13, -0.807, 0.229, 1.46, 4.27, 7.46, 11.8, 17.2, 21.6, 27.1, 32.5};
+  	  double vecV[17] = {-110, -100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50};
 
+	  double Inf[17] = {Iinf(-110), Iinf(-100), Iinf(-90), Iinf(-80), Iinf(-70), Iinf(-60), Iinf(-50), Iinf(-40), Iinf(-30), Iinf(-20), Iinf(-10), Iinf(0), Iinf(10), Iinf(20), Iinf(30), Iinf(40), Iinf(50)};
 
 
 	  sol.f = 0;
 	  double e = 0;	
-	  for (int i=0; i<16; ++i) 
+	  for (int i=0; i<17; ++i) 
 	  {
 	    
 		e += pow(
@@ -106,12 +122,12 @@ class multimodal_RIM_t : public fitness_t
 		);
 
 	  }
-	  sol.f = e/16.0;
+	  sol.f = e/17.0;
 	  
 	  sol.penalty = 0.0;
 	}
 
-	std::string name() const { return "MultimodlRIM"; }
+	std::string name() const { return "MultimodlAFD"; }
 };
 }
 
@@ -124,7 +140,7 @@ int main(int argc, char **argv)
   // Problem definition
   // Note: define as minimization problem!
   //-----------------------------------------
-  hillvallea::fitness_pt fitness_function = std::make_shared<hillvallea::multimodal_RIM_t>();
+  hillvallea::fitness_pt fitness_function = std::make_shared<hillvallea::multimodal_AFD_t>();
   hillvallea::vec_t lower_range_bounds, upper_range_bounds;
   fitness_function->get_param_bounds(lower_range_bounds, upper_range_bounds);
   
@@ -149,7 +165,7 @@ int main(int argc, char **argv)
   bool write_generational_solutions = false;
   bool write_generational_statistics = true;
   std::string write_directory = "./";
-  std::string file_appendix = "RIM_seed_"+std::to_string(random_seed); // can be used when multiple runs are outputted in the same directory
+  std::string file_appendix = "AFD_seed_"+std::to_string(random_seed); // can be used when multiple runs are outputted in the same directory
   
   // Initialization of HillVallEA
   //-----------------------------------------
@@ -173,7 +189,7 @@ int main(int argc, char **argv)
   );
 
   // Running HillVallEA
-  std::cout << "Running HillVallEA on the Multimodal RIM neuron" << std::endl;
+  std::cout << "Running HillVallEA on the Multimodal AFD neuron" << std::endl;
   
   
   opt.run();

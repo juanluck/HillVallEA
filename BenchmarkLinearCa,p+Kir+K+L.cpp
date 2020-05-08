@@ -41,15 +41,15 @@ class multimodal_RIM_t : public fitness_t
 	  lower[0]  = 0.1;
 	  lower[1]  = 0.1;
 	  lower[2]  = 0.1;
-	  lower[3]	= 0.1;
+	  lower[3]  = 0.1;
 	  lower[4]  = 20;
 	  lower[5]  = -100;
 	  lower[6]  = -90;
 	  lower[7]  = -90;
 	  lower[8]  = -90;
 	  lower[9]  = -90;
-	  lower[10]  = -90;
-	  lower[11]  = 1;
+	  lower[10] = -90;
+	  lower[11] = 1;
 	  lower[12] = -30;
 	  lower[13] = 1;
 	  lower[14] = -30;
@@ -64,8 +64,8 @@ class multimodal_RIM_t : public fitness_t
 	  upper[7]  = -2;
 	  upper[8]  = -2;
 	  upper[9]  = -2;
-	  upper[10]  = -2;
-	  upper[11]  = 30;
+	  upper[10] = -2;
+	  upper[11] = 30;
 	  upper[12] = -1;
 	  upper[13] = 30;
 	  upper[14] = -1;
@@ -78,11 +78,26 @@ class multimodal_RIM_t : public fitness_t
 		return x;
 	}
 
+		double Iinf(double V)
+	{
+
+		gCa=0.3; gKir=0.12; gK=0.86; gL=0.44;
+		ECa=35.3; EK=-77.1; EL=-64.23;
+		V12mCa=-29.75; V12hKir=-74.6; V12mK=-48.9; V12hK=-79.6;
+		kmCa=29.1; kKir=-15.1; kmK=28.71; khK=-21;
+
+		double y;
+		y = gCa*xinf(V,V12mCa,kmCa)*xinf(VH,V12hCa,khCa)*(V-ECa)
+		+ gKir*xinf(V,V12hKir,kKir)*(V-EK)
+		+ gK*xinf(V,V12mK,kmK)*xinf(V,V12hK,khK)*(V-EK)
+		+ gL*(V-EL);
+		return y;
+	}
+
 	void define_problem_evaluation(solution_t & sol)
 	{
   	  double vecV[16] = {-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50};
-	  double Inf[16] = {-12.2, -9.13, -6.57, -4.91, -3.57, -2.13, -0.807, 0.229, 1.46, 4.27, 7.46, 11.8, 17.2, 21.6, 27.1, 32.5};
-
+	  double Inf[16] = {Iinf(-100), Iinf(-90), Iinf(-80), Iinf(-70), Iinf(-60), Iinf(-50), Iinf(-40), Iinf(-30), Iinf(-20), Iinf(-10), Iinf(0), Iinf(10), Iinf(20), Iinf(30), Iinf(40), Iinf(50)};
 
 
 	  sol.f = 0;
