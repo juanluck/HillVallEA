@@ -22,16 +22,16 @@ github.com/SCMaree/HillVallEA
 
 namespace hillvallea
 {
-class multimodal_AFD_t : public fitness_t
+class multimodal_BenchmarkCubicCa,p+Kir+K+L_t : public fitness_t
 {
 	public:
 
-	multimodal_AFD_t()
+	multimodal_BenchmarkCubicCa,p+Kir+K+L_t()
 	{
 	  number_of_parameters = 15;
 	  maximum_number_of_evaluations = 10000;
 	}
-	~multimodal_AFD_t() {}
+	~multimodal_BenchmarkCubicCa,p+Kir+K+L_t() {}
 
 	void get_param_bounds(vec_t & lower, vec_t & upper) const
 	{
@@ -138,7 +138,7 @@ class multimodal_AFD_t : public fitness_t
 	  sol.penalty = 0.0;
 	}
 
-	std::string name() const { return "MultimodlAFD"; }
+	std::string name() const { return "MultimodlBenchmarkCubicCa,p+Kir+K+L"; }
 };
 }
 
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
   // Problem definition
   // Note: define as minimization problem!
   //-----------------------------------------
-  hillvallea::fitness_pt fitness_function = std::make_shared<hillvallea::multimodal_AFD_t>();
+  hillvallea::fitness_pt fitness_function = std::make_shared<hillvallea::multimodal_BenchmarkCubicCa,p+Kir+K+L_t>();
   hillvallea::vec_t lower_range_bounds, upper_range_bounds;
   fitness_function->get_param_bounds(lower_range_bounds, upper_range_bounds);
   
@@ -200,7 +200,7 @@ int main(int argc, char **argv)
   );
 
   // Running HillVallEA
-  std::cout << "Running HillVallEA on the Multimodal AFD neuron" << std::endl;
+  std::cout << "Running HillVallEA on the Multimodal BenchmarkCubicCa,p+Kir+K+L" << std::endl;
   
   
   opt.run();
